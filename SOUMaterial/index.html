@@ -4,11 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOUMaterial - BCA 7th Sem</title>
-  <!-- Import Premium 'Inter' Font -->
+  <title>SOUMaterial - BCA Study Materials Hub</title>
+  
+  <!-- Immediate Theme Loader to prevent white flash -->
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('soumaterial_theme');
+        var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  
+  <!-- Prefetch Google Font Connections -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/styles/main.css?v=2">
 </head>
 
@@ -16,17 +31,23 @@
   <div id="navbar-root"></div>
   <main id="app-container" class="container"></main>
   <div id="modal-root"></div>
+  
+  <footer class="footer">
+    <p>Made by <a href="https://github.com/soumaterial" target="_blank" rel="noopener">SOU Students</a> for SOU Students</p>
+  </footer>
 
   <script type="module">
     import { renderNavbar } from './src/components/Navbar.js?v=2';
     import { renderDocViewer } from './src/components/DocViewer.js?v=2';
+    import { renderSearch } from './src/components/Search.js?v=2';
     import { loadHome } from './src/components/Home.js?v=2';
 
-    // Initialize the application layout
+    // Initialize layout and overlay utilities
     renderNavbar();
     renderDocViewer();
+    renderSearch();
 
-    // Load the new Welcome screen as the default view!
+    // Default entrypoint: load the welcome semester explorer
     loadHome(); 
   </script>
 </body>

@@ -1,9 +1,10 @@
-import { saveFileBlob, getFileBlob, deleteFileBlob } from '../data/db.js';
 import { openPreviewModal } from './DocViewer.js?v=2';
+import { loadHome } from './Home.js?v=2';
+import { triggerProgressBar } from './Navbar.js?v=2';
 
 // Helper to load materials state from localStorage (or fallback to materials.json)
 async function getMaterialsData() {
-    let stored = localStorage.getItem('soumaterial_materials_data');
+    let stored = localStorage.getItem('soumaterial_materials_data_v3');
     if (stored) {
         try {
             return JSON.parse(stored);
@@ -11,14 +12,10 @@ async function getMaterialsData() {
             console.error("Failed to parse stored materials data", e);
         }
     }
-    const response = await fetch('./src/data/materials.json');
+    const response = await fetch('./src/data/materials.json?v=3');
     const materialsData = await response.json();
-    localStorage.setItem('soumaterial_materials_data', JSON.stringify(materialsData));
+    localStorage.setItem('soumaterial_materials_data_v3', JSON.stringify(materialsData));
     return materialsData;
-}
-
-function saveMaterialsData(data) {
-    localStorage.setItem('soumaterial_materials_data', JSON.stringify(data));
 }
 
 // Format bytes helper
@@ -36,33 +33,11 @@ function showToast(message, type = 'success') {
     if (!toastContainer) {
         toastContainer = document.createElement('div');
         toastContainer.id = 'toast-container';
-        toastContainer.style.cssText = `
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1100;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        `;
         document.body.appendChild(toastContainer);
     }
 
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.style.cssText = `
-        background: var(--bg-surface);
-        border: 1px solid var(--border-subtle);
-        border-left: 4px solid ${type === 'success' ? 'var(--accent-blue)' : '#ef4444'};
-        border-radius: var(--radius-sm);
-        padding: 0.75rem 1.25rem;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        color: var(--text-primary);
-        font-size: 0.9rem;
-        font-weight: 500;
-        min-width: 250px;
-        animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    `;
     toast.innerHTML = `<span>${message}</span>`;
     toastContainer.appendChild(toast);
 
@@ -74,42 +49,111 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-export async function loadMaterialsVault() {
+// Subject Code Abbreviation Helper
+function getSubjectCodeAbbr(name) {
+    const n = name.toLowerCase();
+    if (n.includes('database management')) return 'DBMS';
+    if (n.includes('discrete mathematics')) return 'DM';
+    if (n.includes('web development fundamentals') || n.includes('web design')) return 'WD';
+    if (n.includes('data structures')) return 'DSA';
+    if (n.includes('c++')) return 'OOP-C++';
+    if (n.includes('java')) return 'JAVA';
+    if (n.includes('operating systems')) return 'OS';
+    if (n.includes('python')) return 'PYTHON';
+    if (n.includes('software engineering')) return 'SE';
+    if (n.includes('laravel') || n.includes('php')) return 'PHP-LV';
+    if (n.includes('computer networks')) return 'CN';
+    if (n.includes('android')) return 'AND-DEV';
+    if (n.includes('cloud computing')) return 'CLOUD';
+    if (n.includes('generative ai')) return 'G-AI';
+    if (n.includes('computational analytics')) return 'COMP-A';
+    if (n.includes('information security')) return 'I-SEC';
+    if (n.includes('full stack')) return 'FSD-I';
+    if (n.includes('internship') || n.includes('capstone')) return 'PROJ-I';
+    if (n.includes('advanced web')) return 'ADV-WEB';
+    if (n.includes('artificial intelligence')) return 'AI-ML';
+    
+    // Fallback: take first letter of each word
+    return name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 6);
+}
+
+export async function loadMaterialsVault(semesterNum = 7) {
     const container = document.getElementById('app-container');
-    container.classList.add('fade-in');
+    container.innerHTML = '<p style="text-align:center; padding: 3rem;">Loading materials...</p>';
 
     try {
         const materialsData = await getMaterialsData();
 
-        let html = `
-            <div style="margin-bottom: 2rem; padding-left: 0.5rem;">
-                <h2 style="font-size: 1.8rem; font-weight: 700;">Subject</h2>
-            </div>
-            <div class="grid">`;
+        // Filter subjects by selected semester
+        const semesterSubjects = materialsData.filter(sub => sub.semester === semesterNum);
 
-        materialsData.forEach(sub => {
-            let totalFiles = 0;
-            sub.units.forEach(u => {
-                totalFiles += u.files ? u.files.length : 0;
+        const notebookColors = ['nb-blue', 'nb-green', 'nb-purple', 'nb-red', 'nb-orange', 'nb-pink', 'nb-teal', 'nb-indigo'];
+
+        let notebooksHtml = '';
+
+        if (semesterSubjects.length > 0) {
+            semesterSubjects.forEach((sub, idx) => {
+                let totalFiles = 0;
+                sub.units.forEach(u => {
+                    totalFiles += u.files ? u.files.length : 0;
+                });
+
+                const colorClass = notebookColors[idx % notebookColors.length];
+                const abbr = getSubjectCodeAbbr(sub.subjectName);
+
+                notebooksHtml += `
+                    <div class="notebook-card ${colorClass}" data-id="${sub.subjectCode}">
+                        <div class="notebook-header">
+                            <span class="notebook-tag">BCA-Sem ${semesterNum}</span>
+                            <h2 class="notebook-code-abbr">${abbr}</h2>
+                        </div>
+                        <h3 class="notebook-title">${sub.subjectName}</h3>
+                        <div class="notebook-footer">
+                            <span>📁 ${totalFiles} Docs</span>
+                        </div>
+                    </div>
+                `;
             });
+        } else {
+            notebooksHtml = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; border: 1px dashed var(--border-subtle); border-radius: var(--radius-lg); background: var(--bg-surface);">
+                    <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 1rem;">No subjects loaded for Semester ${semesterNum} yet.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Try exploring Semester 7 to see active curriculum guides!</p>
+                </div>
+            `;
+        }
 
-            html += `
-            <div class="card folder-card" data-id="${sub.subjectCode}">
-                <h3><span class="folder-icon">📁</span> ${sub.subjectName}</h3>
-                <p><strong>Code:</strong> ${sub.subjectCode}</p>
-                <p>${totalFiles} Materials Available</p>
-            </div>`;
+        container.innerHTML = `
+            <button id="back-to-home-btn" class="back-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Semesters
+            </button>
+            <div style="margin-bottom: 2rem;">
+                <h1 style="font-size: 2.2rem; font-family: 'Outfit', sans-serif;">Semester-0${semesterNum}</h1>
+                <p style="color: var(--text-secondary); font-size: 1rem;">Browse notes, files, and resources categorized by curriculum subject.</p>
+            </div>
+            <div class="grid-notebooks">
+                ${notebooksHtml}
+            </div>
+        `;
+
+        // Event listener for Back Button
+        document.getElementById('back-to-home-btn').addEventListener('click', () => {
+            triggerProgressBar();
+            loadHome();
         });
-        html += `</div>`;
-        container.innerHTML = html;
 
-        document.querySelectorAll('.folder-card').forEach(card => {
-            card.addEventListener('click', () => openSubjectFolder(materialsData, card.dataset.id));
+        // Event listeners for Notebook Cards
+        document.querySelectorAll('.notebook-card').forEach(card => {
+            card.addEventListener('click', () => {
+                triggerProgressBar();
+                openSubjectFolder(materialsData, card.dataset.id);
+            });
         });
 
     } catch (error) {
         console.error("Error loading materials vault", error);
-        container.innerHTML = `<p style="color:#ff6b6b;">Error loading materials data.</p>`;
+        container.innerHTML = `<p style="color:#ef4444; text-align:center; padding: 3rem;">Error loading materials data.</p>`;
     }
 }
 
@@ -118,17 +162,18 @@ export function openSubjectFolder(data, subjectCode) {
     const subject = data.find(s => s.subjectCode === subjectCode);
 
     let html = `
-        <button id="back-btn" class="back-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            Modules
+        <button id="back-to-sem-btn" class="back-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Semester-0${subject.semester}
         </button>
-        <div style="margin-bottom: 2rem; padding-left: 0.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-            <div>
-                <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem;">${subject.subjectName}</h2>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">Code: ${subject.subjectCode} • ${subject.faculties.join(', ')}</p>
+        <div class="subject-info-banner">
+            <h2>${subject.subjectName}</h2>
+            <div class="subject-meta">
+                <span><strong>Code:</strong> ${subject.subjectCode}</span>
+                ${subject.faculties && subject.faculties.length > 0 ? `<span>• <strong>Faculty:</strong> ${subject.faculties.join(', ')}</span>` : ''}
             </div>
         </div>
-        <div class="chapters-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
     `;
 
     // Loop through ALL units/chapters
@@ -136,40 +181,29 @@ export function openSubjectFolder(data, subjectCode) {
         let filesHtml = '';
         if (u.files && u.files.length > 0) {
             u.files.forEach(file => {
-                const deleteBtnHtml = file.isUserUploaded 
-                    ? `<button class="btn-delete" data-fileid="${file.fileId}" data-filename="${file.fileName}" style="background: none; border: none; color: #ef4444; cursor: pointer; margin-left: 0.5rem; font-size: 0.85rem; font-weight: 500; padding: 0.3rem 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.2); transition: var(--transition);">Delete</button>` 
-                    : '';
-
                 filesHtml += `
-                <div class="file-item chapter-card" data-filename="${file.fileName}" data-fileid="${file.fileId || ''}" data-uploaded="${!!file.isUserUploaded}" style="cursor: pointer;">
+                <div class="file-item chapter-card" data-filename="${file.fileName}" data-uploaded="false">
                     <div class="file-info">
                         <h4>📄 ${file.displayName}</h4>
                         <p>PDF Document • ${file.fileSize}</p>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <button class="btn-download" data-fileid="${file.fileId || ''}" data-filename="${file.fileName}" data-uploaded="${!!file.isUserUploaded}">Get</button>
-                        ${deleteBtnHtml}
+                    <div class="file-actions">
+                        <button class="btn-download" data-filename="${file.fileName}">Get</button>
                     </div>
                 </div>`;
             });
         } else {
             filesHtml = `
-                <div style="padding: 1.25rem; text-align: center; border: 1px dashed var(--border-subtle); border-radius: var(--radius-md); background: rgba(0,0,0,0.01);">
+                <div style="padding: 1.5rem; text-align: center; border: 1.5px dashed var(--border-subtle); border-radius: var(--radius-md); background: rgba(0,0,0,0.01);">
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">No documents uploaded for this unit yet.</p>
                 </div>
             `;
         }
 
         html += `
-        <div class="unit-section-card" style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle);">
-            <div class="unit-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
-                <h3 style="font-size: 1.15rem; font-weight: 600; color: var(--text-primary);">Unit ${u.unitNumber}: ${u.unitTitle || `Module ${u.unitNumber}`}</h3>
-                
-                <label class="btn-primary" style="font-size: 0.85rem; padding: 0.45rem 1rem; border-radius: var(--radius-sm); display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; height: auto;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                    Upload PDF
-                    <input type="file" class="unit-file-input" data-unit="${u.unitNumber}" accept=".pdf" style="display: none;">
-                </label>
+        <div class="unit-section-card">
+            <div class="unit-header">
+                <h3>Unit ${u.unitNumber}: ${u.unitTitle || `Module ${u.unitNumber}`}</h3>
             </div>
             <div class="unit-files-list">
                 ${filesHtml}
@@ -181,17 +215,19 @@ export function openSubjectFolder(data, subjectCode) {
     container.innerHTML = html;
 
     // Attach Back Button Listener
-    document.getElementById('back-btn').addEventListener('click', loadMaterialsVault);
+    document.getElementById('back-to-sem-btn').addEventListener('click', () => {
+        triggerProgressBar();
+        loadMaterialsVault(subject.semester);
+    });
 
-    // Attach File List Item Event Listeners (Preview and Download/Delete triggers)
+    // Attach File List Item Event Listeners (Preview and Download triggers)
     document.querySelectorAll('.chapter-card').forEach(card => {
         card.addEventListener('click', (e) => {
-            // Prevent preview if clicking the download or delete button
-            if (e.target.closest('.btn-download') || e.target.closest('.btn-delete')) {
+            // Prevent preview if clicking the download button
+            if (e.target.closest('.btn-download')) {
                 return;
             }
-            const isUploaded = card.dataset.uploaded === 'true';
-            openPreviewModal(card.dataset.filename, card.dataset.fileid, isUploaded);
+            openPreviewModal(card.dataset.filename, null, false);
         });
     });
 
@@ -199,146 +235,19 @@ export function openSubjectFolder(data, subjectCode) {
     document.querySelectorAll('.btn-download').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            btn.classList.add('animate-download');
-            setTimeout(() => btn.classList.remove('animate-download'), 200);
-
-            const fileId = btn.dataset.fileid;
             const fileName = btn.dataset.filename;
-            const isUploaded = btn.dataset.uploaded === 'true';
-            await handleDownload(fileId, fileName, isUploaded);
+            await handleDownload(fileName);
         });
     });
-
-    // Attach Delete Button Listeners
-    document.querySelectorAll('.btn-delete').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            const fileId = btn.dataset.fileid;
-            const fileName = btn.dataset.filename;
-            if (confirm(`Are you sure you want to delete the file "${fileName}"?`)) {
-                await handleDeleteFile(data, subjectCode, fileId, fileName);
-            }
-        });
-    });
-
-    // Attach File Upload Event Listeners for each unit
-    document.querySelectorAll('.unit-file-input').forEach(input => {
-        input.addEventListener('change', async (e) => {
-            const unitNumber = parseInt(input.dataset.unit);
-            const file = e.target.files[0];
-            if (file) {
-                if (file.type !== 'application/pdf') {
-                    showToast('Only PDF files are supported for uploads.', 'error');
-                    input.value = '';
-                    return;
-                }
-                await handleFileUpload(data, subjectCode, unitNumber, file);
-            }
-        });
-    });
-}
-
-// File Upload Handler
-async function handleFileUpload(data, subjectCode, unitNumber, file) {
-    try {
-        const fileId = 'user-pdf-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
-        
-        // 1. Save Blob to IndexedDB
-        await saveFileBlob(fileId, file);
-
-        // 2. Add metadata to state
-        const subject = data.find(s => s.subjectCode === subjectCode);
-        const unit = subject.units.find(u => u.unitNumber === unitNumber);
-        
-        if (!unit.files) {
-            unit.files = [];
-        }
-
-        const newFile = {
-            fileId: fileId,
-            fileName: file.name,
-            displayName: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
-            fileSize: formatBytes(file.size),
-            isUserUploaded: true,
-            date: new Date().toLocaleDateString()
-        };
-
-        unit.files.push(newFile);
-        unit.hasContent = true;
-
-        // 3. Save updated data structure to localStorage
-        saveMaterialsData(data);
-
-        showToast(`"${file.name}" uploaded successfully!`);
-
-        // 4. Re-render UI
-        openSubjectFolder(data, subjectCode);
-
-    } catch (err) {
-        console.error("Upload error", err);
-        showToast('Error uploading document.', 'error');
-    }
 }
 
 // Download Handler
-async function handleDownload(fileId, fileName, isUploaded) {
-    if (isUploaded && fileId) {
-        try {
-            const blob = await getFileBlob(fileId);
-            if (!blob) {
-                showToast("File content not found in browser storage.", "error");
-                return;
-            }
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        } catch (e) {
-            console.error("Download from IndexedDB failed", e);
-            showToast("Failed to download file.", "error");
-        }
-    } else {
-        // Preloaded file
-        const a = document.createElement('a');
-        a.href = `./public/docs/${fileName}`;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
-}
-
-// Delete Handler
-async function handleDeleteFile(data, subjectCode, fileId, fileName) {
-    try {
-        // 1. Delete Blob from IndexedDB
-        await deleteFileBlob(fileId);
-
-        // 2. Remove from metadata
-        const subject = data.find(s => s.subjectCode === subjectCode);
-        subject.units.forEach(u => {
-            if (u.files) {
-                u.files = u.files.filter(f => f.fileId !== fileId);
-                if (u.files.length === 0) {
-                    u.hasContent = false;
-                }
-            }
-        });
-
-        // 3. Save back to localStorage
-        saveMaterialsData(data);
-
-        showToast(`Deleted "${fileName}" successfully.`);
-
-        // 4. Re-render UI
-        openSubjectFolder(data, subjectCode);
-
-    } catch (err) {
-        console.error("Delete error", err);
-        showToast('Error deleting file.', 'error');
-    }
+async function handleDownload(fileName) {
+    // Preloaded static file from docs directory
+    const a = document.createElement('a');
+    a.href = `./public/docs/${fileName}`;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }

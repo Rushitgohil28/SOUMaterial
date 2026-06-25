@@ -34,6 +34,26 @@ export function openPreviewModal(fileName, fileId = null, isUserUploaded = false
     const pdfFrame = document.getElementById('pdf-frame');
     const pdfModal = document.getElementById('pdf-modal');
 
+    // Mobile Viewport optimization: open in a new tab for native mobile browser PDF rendering
+    if (window.innerWidth <= 768) {
+        if (isUserUploaded && fileId) {
+            getFileBlob(fileId).then(blob => {
+                if (blob) {
+                    const tempUrl = URL.createObjectURL(blob);
+                    window.open(tempUrl, '_blank');
+                } else {
+                    alert("Error: File Not Found");
+                }
+            }).catch(err => {
+                console.error("Error loading preview for mobile tab", err);
+            });
+        } else {
+            const pdfPath = `./public/docs/${fileName}`;
+            window.open(pdfPath, '_blank');
+        }
+        return;
+    }
+
     modalTitle.innerText = fileName;
 
     if (isUserUploaded && fileId) {

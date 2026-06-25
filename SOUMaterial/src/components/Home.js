@@ -1,49 +1,52 @@
-import { loadMaterialsVault } from './MaterialsVault.js';
+import { loadMaterialsVault } from './MaterialsVault.js?v=2';
+import { triggerProgressBar } from './Navbar.js?v=2';
 
 export function loadHome() {
     const container = document.getElementById('app-container');
 
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    const homeTab = document.getElementById('tab-home');
-    if (homeTab) homeTab.classList.add('active');
+    let foldersHtml = '';
+    [7, 8].forEach(sem => {
+        const colorClass = sem === 7 ? 'folder-color-purple' : 'folder-color-blue';
+        foldersHtml += `
+            <div class="folder-3d-wrapper group" data-semester="${sem}">
+                <div class="folder-3d ${colorClass}">
+                    <div class="folder-back"></div>
+                    <div class="folder-page page-3"></div>
+                    <div class="folder-page page-2"></div>
+                    <div class="folder-page page-1"></div>
+                    <div class="folder-front">
+                        <p class="folder-title">Semester-0${sem}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
 
     container.innerHTML = `
         <div class="hero-section">
-            <div class="glow-orb"></div>
-            <div class="badge-pill">🚀 BCA Honors 7th Semester</div>
+            <div class="badge-pill">🚀 BCA Honors Study Portal</div>
             
-            <h1 class="hero-title">Welcome to <br><span class="gradient-text">SOUMaterial</span></h1>
-            <p class="hero-subtitle">Your lightning-fast, beautifully designed hub for university schedules, lecture notes, and academic resources.</p>
-            
-            <div class="hero-actions">
-                <button id="cta-explore" class="btn-primary">
-                    Browse Materials 
-                    <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </button>
-            </div>
+            <h1 class="hero-title">Get All Your <span class="gradient-text">Material</span><br>at One Spot</h1>
+            <p class="hero-subtitle">
+                This site contains BCA Study Materials of Silver Oak University. 
+                In More Beautiful and Reader Friendly Format. Consider leaving 
+                <a href="https://forms.gle/soumaterialfeedback" target="_blank" rel="noopener noreferrer">Feedback</a>.
+            </p>
 
-            <div class="bento-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 3.5rem;">
-                <div class="bento-card" style="text-align: left; padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); background: var(--bg-surface); transition: var(--transition);">
-                    <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--text-primary);">🤖 Generative AI</h3>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary);">Explore LLMs, diffusion frameworks, prompt engineering, and neural network foundations.</p>
-                </div>
-                <div class="bento-card" style="text-align: left; padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); background: var(--bg-surface); transition: var(--transition);">
-                    <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--text-primary);">💻 Full Stack Dev-I</h3>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary);">Master modern multi-tier web architectures, database design patterns, and REST endpoints.</p>
-                </div>
-                <div class="bento-card" style="text-align: left; padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); background: var(--bg-surface); transition: var(--transition);">
-                    <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--text-primary);">📊 Computational Analytics</h3>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary);">Unleash computational statistics, data visualization, predictive pipelines, and insight modeling.</p>
-                </div>
-                <div class="bento-card" style="text-align: left; padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); background: var(--bg-surface); transition: var(--transition);">
-                    <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--text-primary);">🔒 Information Security</h3>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary);">Dive deep into network architectures, cryptographic protocols, threats, and secure policies.</p>
-                </div>
+            <h2 style="font-size: 2.2rem; font-family: 'Outfit', sans-serif; margin-top: 3.5rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--text-primary);">BCA Honors</h2>
+            
+            <div class="grid-semesters">
+                ${foldersHtml}
             </div>
         </div>
     `;
 
-    document.getElementById('cta-explore').addEventListener('click', () => {
-        document.getElementById('tab-materials').click();
+    // Attach event listeners to folders
+    document.querySelectorAll('.folder-3d-wrapper').forEach(wrapper => {
+        wrapper.addEventListener('click', () => {
+            const sem = parseInt(wrapper.dataset.semester);
+            triggerProgressBar();
+            loadMaterialsVault(sem);
+        });
     });
 }

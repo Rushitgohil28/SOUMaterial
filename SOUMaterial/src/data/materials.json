@@ -3,10 +3,11 @@
         "subjectCode": "3040233403",
         "subjectName": "Introduction to Generative AI",
         "faculties": [
-            "Ms. Jalpa Patel (JBP)",
-            "Mr. Smit Tarapara (SAT)"
+            "Mr. Smit Tarapara (SAT)",
+            "Ms. Jalpa Patel (JBP)"
         ],
         "folderIcon": "folder-brain",
+        "semester": 7,
         "units": [
             {
                 "unitNumber": 1,
@@ -16,23 +17,11 @@
                     {
                         "fileName": "SOUMaterial_Generative_AI_Unit_1.pdf",
                         "displayName": "Unit 1: Complete Student Guide (Point to Point)",
-                        "fileSize": "1.2 MB",
-                        "viewUrl": "/assets/docs/SOUMaterial_Generative_AI_Unit_1.pdf",
-                        "downloadUrl": "/assets/docs/SOUMaterial_Generative_AI_Unit_1.pdf"
+                        "fileSize": "38.8 KB",
+                        "viewUrl": "./public/docs/SOUMaterial_Generative_AI_Unit_1.pdf",
+                        "downloadUrl": "./public/docs/SOUMaterial_Generative_AI_Unit_1.pdf"
                     }
                 ]
-            },
-            {
-                "unitNumber": 2,
-                "unitTitle": "Unit 2",
-                "hasContent": false,
-                "files": []
-            },
-            {
-                "unitNumber": 3,
-                "unitTitle": "Unit 3",
-                "hasContent": false,
-                "files": []
             }
         ]
     },
@@ -44,10 +33,11 @@
             "Ms. Jeenal Panchasra (JHP)"
         ],
         "folderIcon": "folder-chart",
+        "semester": 7,
         "units": [
             {
                 "unitNumber": 1,
-                "unitTitle": "Unit 1",
+                "unitTitle": "Analytics & Statistical Foundations",
                 "hasContent": false,
                 "files": []
             }
@@ -61,10 +51,11 @@
             "Ms. Manali Panchal (MJP)"
         ],
         "folderIcon": "folder-lock",
+        "semester": 7,
         "units": [
             {
                 "unitNumber": 1,
-                "unitTitle": "Unit 1",
+                "unitTitle": "Cryptography & Network Security",
                 "hasContent": false,
                 "files": []
             }
@@ -77,24 +68,41 @@
             "Mr. Harsh Barot (HDB)"
         ],
         "folderIcon": "folder-code",
+        "semester": 7,
         "units": [
             {
                 "unitNumber": 1,
-                "unitTitle": "Unit 1",
+                "unitTitle": "Modern REST APIs & Node Express",
                 "hasContent": false,
                 "files": []
             }
         ]
     },
     {
-        "subjectCode": "3040233491",
-        "subjectName": "Internship/Capstone Project-1",
-        "faculties": [],
-        "folderIcon": "folder-workspace",
+        "subjectCode": "801",
+        "subjectName": "Advanced Web Technologies",
+        "faculties": ["Mr. Harsh Barot"],
+        "folderIcon": "folder-code",
+        "semester": 8,
         "units": [
             {
                 "unitNumber": 1,
-                "unitTitle": "Project Guidelines",
+                "unitTitle": "Server-side Rendering & Next.js",
+                "hasContent": false,
+                "files": []
+            }
+        ]
+    },
+    {
+        "subjectCode": "802",
+        "subjectName": "Artificial Intelligence & ML",
+        "faculties": ["Ms. Jalpa Patel"],
+        "folderIcon": "folder-brain",
+        "semester": 8,
+        "units": [
+            {
+                "unitNumber": 1,
+                "unitTitle": "Machine Learning Fundamentals",
                 "hasContent": false,
                 "files": []
             }

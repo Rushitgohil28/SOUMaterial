@@ -1,10 +1,17 @@
-function switchView(viewFunction) {
+/**
+ * Transition helper to swap views smoothly with transition animations
+ */
+export function switchView(viewFunction) {
     const container = document.getElementById('app-container');
-    container.classList.remove('fade-in');
+    if (!container) return;
 
-    // Trigger reflow to restart animation
-    void container.offsetWidth;
+    container.style.opacity = '0';
+    container.style.transform = 'translateY(10px)';
+    container.style.transition = 'all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1)';
 
-    container.classList.add('fade-in');
-    viewFunction();
+    setTimeout(() => {
+        viewFunction();
+        container.style.opacity = '1';
+        container.style.transform = 'translateY(0)';
+    }, 200);
 }
