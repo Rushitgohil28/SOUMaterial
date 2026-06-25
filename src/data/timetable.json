@@ -1,0 +1,215 @@
+{
+    "semester": "7_BCA",
+    "division": "A",
+    "academicYear": "2026-27",
+    "effectiveFrom": "22/06/2026",
+    "timetable": [
+        {
+            "day": "Monday",
+            "schedule": [
+                {
+                    "time": "7:30 TO 8:20",
+                    "subject": "Introduction to Generative AI",
+                    "code": "3040233403",
+                    "faculty": "Mr. Smit Tarapara (SAT)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "8:20 TO 9:10",
+                    "subject": "Full Stack Development-I",
+                    "code": "3040233448",
+                    "faculty": "Mr. Harsh Barot (HDB)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "9:10 TO 9:20",
+                    "subject": "Break",
+                    "code": null,
+                    "faculty": null,
+                    "room": null,
+                    "type": "Break"
+                },
+                {
+                    "time": "9:20 TO 10:10",
+                    "subject": "Computational Analytics",
+                    "code": "3040233401",
+                    "faculty": "Mr. Rakesh Kharva (RVK)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "10:10 TO 11:00",
+                    "subject": "Information Security",
+                    "code": "3040233402",
+                    "faculty": "Ms. Meghna Panara (PMR)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                }
+            ]
+        },
+        {
+            "day": "Tuesday",
+            "schedule": [
+                {
+                    "time": "7:30 TO 8:20",
+                    "subject": "Information Security",
+                    "code": "3040233402",
+                    "faculty": "Ms. Manali Panchal (MJP)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "8:20 TO 9:10",
+                    "subject": "Introduction to Generative AI",
+                    "code": "3040233403",
+                    "faculty": "Mr. Smit Tarapara (SAT)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "9:10 TO 9:20",
+                    "subject": "Break",
+                    "code": null,
+                    "faculty": null,
+                    "room": null,
+                    "type": "Break"
+                },
+                {
+                    "time": "9:20 TO 11:00",
+                    "subject": "Computational Analytics",
+                    "code": "3040233401",
+                    "room": "B-606",
+                    "type": "Practical",
+                    "batches": [
+                        {
+                            "batch": "A1",
+                            "faculty": "Mr. Rakesh Kharva (RVK)"
+                        },
+                        {
+                            "batch": "A2",
+                            "faculty": "Ms. Jeenal Panchasra (JHP)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "day": "Wednesday",
+            "schedule": [
+                {
+                    "time": "7:30 TO 9:10",
+                    "subject": "Introduction to Generative AI",
+                    "code": "3040233403",
+                    "room": "B-606",
+                    "type": "Practical",
+                    "batches": [
+                        {
+                            "batch": "A1",
+                            "faculty": "Ms. Jalpa Patel (JBP)"
+                        },
+                        {
+                            "batch": "A2",
+                            "faculty": "Mr. Smit Tarapara (SAT)"
+                        }
+                    ]
+                },
+                {
+                    "time": "9:10 TO 9:20",
+                    "subject": "Break",
+                    "code": null,
+                    "faculty": null,
+                    "room": null,
+                    "type": "Break"
+                },
+                {
+                    "time": "9:20 TO 11:00",
+                    "subject": "Information Security",
+                    "code": "3040233402",
+                    "room": "B-606",
+                    "type": "Practical",
+                    "batches": [
+                        {
+                            "batch": "A1",
+                            "faculty": "Ms. Meghna Panara (PMR)"
+                        },
+                        {
+                            "batch": "A2",
+                            "faculty": "Ms. Manali Panchal (MJP)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "day": "Thursday",
+            "schedule": [
+                {
+                    "time": "7:30 TO 8:20",
+                    "subject": "Full Stack Development-I",
+                    "code": "3040233448",
+                    "faculty": "Mr. Harsh Barot (HDB)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "8:20 TO 9:10",
+                    "subject": "Computational Analytics",
+                    "code": "3040233401",
+                    "faculty": "Ms. Jeenal Panchasra (JHP)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "9:10 TO 9:20",
+                    "subject": "Break",
+                    "code": null,
+                    "faculty": null,
+                    "room": null,
+                    "type": "Break"
+                },
+                {
+                    "time": "9:20 TO 10:10",
+                    "subject": "Information Security",
+                    "code": "3040233402",
+                    "faculty": "Ms. Meghna Panara (PMR)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "10:10 TO 11:00",
+                    "subject": "Computational Analytics",
+                    "code": "3040233401",
+                    "faculty": "Mr. Rakesh Kharva (RVK)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                },
+                {
+                    "time": "11:00 TO 11:10",
+                    "subject": "Break",
+                    "code": null,
+                    "faculty": null,
+                    "room": null,
+                    "type": "Break"
+                },
+                {
+                    "time": "11:10 TO 12:00",
+                    "subject": "Introduction to Generative AI",
+                    "code": "3040233403",
+                    "faculty": "Mr. Smit Tarapara (SAT)",
+                    "room": "B-218",
+                    "type": "Lecture"
+                }
+            ]
+        },
+        {
+            "day": "Friday",
+            "schedule": []
+        },
+        {
+            "day": "Saturday",
+            "schedule": []
+        }
+    ]
+}
