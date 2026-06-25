@@ -1,0 +1,103 @@
+[
+    {
+        "subjectCode": "3040233403",
+        "subjectName": "Introduction to Generative AI",
+        "faculties": [
+            "Ms. Jalpa Patel (JBP)",
+            "Mr. Smit Tarapara (SAT)"
+        ],
+        "folderIcon": "folder-brain",
+        "units": [
+            {
+                "unitNumber": 1,
+                "unitTitle": "Introduction to Generative AI",
+                "hasContent": true,
+                "files": [
+                    {
+                        "fileName": "SOUMaterial_Generative_AI_Unit_1.pdf",
+                        "displayName": "Unit 1: Complete Student Guide (Point to Point)",
+                        "fileSize": "1.2 MB",
+                        "viewUrl": "/assets/docs/SOUMaterial_Generative_AI_Unit_1.pdf",
+                        "downloadUrl": "/assets/docs/SOUMaterial_Generative_AI_Unit_1.pdf"
+                    }
+                ]
+            },
+            {
+                "unitNumber": 2,
+                "unitTitle": "Unit 2",
+                "hasContent": false,
+                "files": []
+            },
+            {
+                "unitNumber": 3,
+                "unitTitle": "Unit 3",
+                "hasContent": false,
+                "files": []
+            }
+        ]
+    },
+    {
+        "subjectCode": "3040233401",
+        "subjectName": "Computational Analytics",
+        "faculties": [
+            "Mr. Rakesh Kharva (RVK)",
+            "Ms. Jeenal Panchasra (JHP)"
+        ],
+        "folderIcon": "folder-chart",
+        "units": [
+            {
+                "unitNumber": 1,
+                "unitTitle": "Unit 1",
+                "hasContent": false,
+                "files": []
+            }
+        ]
+    },
+    {
+        "subjectCode": "3040233402",
+        "subjectName": "Information Security",
+        "faculties": [
+            "Ms. Meghna Panara (PMR)",
+            "Ms. Manali Panchal (MJP)"
+        ],
+        "folderIcon": "folder-lock",
+        "units": [
+            {
+                "unitNumber": 1,
+                "unitTitle": "Unit 1",
+                "hasContent": false,
+                "files": []
+            }
+        ]
+    },
+    {
+        "subjectCode": "3040233448",
+        "subjectName": "Full Stack Development-I",
+        "faculties": [
+            "Mr. Harsh Barot (HDB)"
+        ],
+        "folderIcon": "folder-code",
+        "units": [
+            {
+                "unitNumber": 1,
+                "unitTitle": "Unit 1",
+                "hasContent": false,
+                "files": []
+            }
+        ]
+    },
+    {
+        "subjectCode": "3040233491",
+        "subjectName": "Internship/Capstone Project-1",
+        "faculties": [],
+        "folderIcon": "folder-workspace",
+        "units": [
+            {
+                "unitNumber": 1,
+                "unitTitle": "Project Guidelines",
+                "hasContent": false,
+                "files": []
+            }
+        ]
+    }
+]
