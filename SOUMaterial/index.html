@@ -2,54 +2,132 @@
 <html lang="en">
 
 <head>
-  <meta name="google-site-verification" content="ZELis-OjFteZSR6_adAhUzbUwxt9wpAsDbXUkfZDSaY" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOUMaterial - BCA Study Materials Hub</title>
-  
+
+  <!-- SEO Meta Tags -->
+  <title>SOUMaterial | Silver Oak University BCA Study Materials</title>
+  <meta name="title" content="SOUMaterial | Silver Oak University BCA Study Materials">
+  <meta name="description"
+    content="Access Silver Oak University (SOU) BCA study materials, notes, unit guides, syllabus outlines, and class timetables at SOUMaterial for BCA Honors (Semesters 7 & 8) students.">
+  <meta name="keywords"
+    content="sounotes, soumaterial, sou notes, sou material, silver oak university, bca notes, bca study material, bca syllabus, silver oak university bca, bca honors, bca 7th sem, bca 8th sem, generative ai notes, computational analytics, information security, full stack development, sou bca timetable, sounotes.vercel.app, soumaterial.vercel.app, bca notes download, silver oak university student portal, sou notes download, bca notes vercel, silver oak university timetable, sou material vercel, sounotes bca, soumaterial bca">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="author" content="SOU Students">
+  <meta name="distribution" content="global">
+  <meta name="rating" content="General">
+  <meta name="revisit-after" content="7 days">
+  <meta name="theme-color" content="#0d0e12">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://soumaterial.vercel.app/">
+  <meta property="og:title" content="SOUMaterial | Silver Oak University BCA Study Materials">
+  <meta property="og:description"
+    content="Access Silver Oak University (SOU) BCA study materials, notes, unit guides, syllabus outlines, and class timetables at SOUMaterial for BCA Honors (Semesters 7 & 8) students.">
+  <meta property="og:image" content="https://soumaterial.vercel.app/soumaterial_web_banner_1782389754928.png">
+  <meta property="og:site_name" content="SOUMaterial">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://soumaterial.vercel.app/">
+  <meta property="twitter:title"
+    content="SOUMaterial | Silver Oak University BCA Study Materials & Timetable Hub | SOUNotes">
+  <meta property="twitter:description"
+    content="Access Silver Oak University (SOU) BCA study materials, notes, unit guides, syllabus outlines, and class timetables at SOUMaterial. Premium dark-themed viewer designed for BCA Honors (Semesters 7 & 8) students. Also powered by SOUNotes.">
+  <meta property="twitter:image" content="https://soumaterial.vercel.app/soumaterial_web_banner_1782389754928.png">
+
+  <!-- Canonical Reference -->
+  <link rel="canonical" href="https://soumaterial.vercel.app/">
+
+  <!-- Schema.org JSON-LD Structured Data for Search Engine Optimization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SOUMaterial",
+    "alternateName": [
+      "SOUNotes",
+      "SOU Notes",
+      "SOU Material",
+      "SOUMaterial Hub",
+      "soumaterial.vercel.app",
+      "sounotes.vercel.app"
+    ],
+    "url": "https://soumaterial.vercel.app/",
+    "description": "Access Silver Oak University (SOU) BCA study materials, lecture notes, syllabus outlines, and class timetables. Free, beautiful, dark-themed portal for BCA Honors.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "SOU Students Developers",
+      "url": "https://soumaterial.vercel.app/"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://soumaterial.vercel.app/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
   <!-- Immediate Theme Loader to prevent white flash -->
   <script>
-    (function() {
+    (function () {
       try {
         var savedTheme = localStorage.getItem('soumaterial_theme');
-        var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-          document.documentElement.classList.add('dark');
-        } else {
+        if (savedTheme === 'light') {
           document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
         }
-      } catch (e) {}
+      } catch (e) { }
     })();
   </script>
-  
+
   <!-- Prefetch Google Font Connections -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="./src/styles/main.css?v=2">
+  <link rel="stylesheet" href="./src/styles/main.css?v=3">
+
+  <!-- Web App Manifest for PWA Support -->
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- Register PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 
 <body>
   <div id="navbar-root"></div>
   <main id="app-container" class="container"></main>
   <div id="modal-root"></div>
-  
+
   <footer class="footer">
-    <p>Made by <a href="https://github.com/soumaterial" target="_blank" rel="noopener">SOU Students</a> for SOU Students</p>
+    <p>Made by <a href="https://github.com/soumaterial" target="_blank" rel="noopener">SOU Students</a> for SOU Students
+    </p>
   </footer>
 
   <script type="module">
-    import { renderNavbar } from './src/components/Navbar.js?v=2';
-    import { renderDocViewer } from './src/components/DocViewer.js?v=2';
-    import { renderSearch } from './src/components/Search.js?v=2';
-    import { loadHome } from './src/components/Home.js?v=2';
+    import { renderNavbar } from './src/components/Navbar.js?v=3';
+    import { renderDocViewer } from './src/components/DocViewer.js?v=3';
+    import { renderSearch } from './src/components/Search.js?v=3';
+    import { initRouter } from './src/app.js?v=3';
 
     // Initialize layout and overlay utilities
     renderNavbar();
     renderDocViewer();
     renderSearch();
 
-    // Default entrypoint: load the welcome semester explorer
-    loadHome(); 
+    // Initialize the hash-based history router
+    initRouter(); 
   </script>
 </body>
 
